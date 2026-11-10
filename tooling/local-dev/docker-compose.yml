@@ -1,0 +1,100 @@
+# Local development stack.
+#
+# Everything here is local and disposable. No production data, no production
+# credential, no external endpoint. Copy `.env.example` values into your shell;
+# never commit a real value.
+#
+#   docker compose up -d
+#   docker compose ps
+#   docker compose down -v      # also removes the local volumes
+
+name: agent-platform-local
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: agent_platform
+      POSTGRES_PASSWORD: local_development_only
+      POSTGRES_DB: agent_platform
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U agent_platform -d agent_platform"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.111.0
+    command: ["--config=/etc/otel/config.yaml"]
+    volumes:
+      - ./otel-collector.yaml:/etc/otel/config.yaml:ro
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+
+  agent-api:
+    build:
+      context: ../..
+      dockerfile: apps/agent-api/Dockerfile
+    environment:
+      AGENT_API_HOST: 0.0.0.0
+      AGENT_API_PORT: "8080"
+      AGENT_API_BASE_PATH: /api/v1
+      AGENT_API_REQUIRE_AUTH: "false"
+      AGENT_STATE_STORE_URL: postgres://agent_platform:local_development_only@postgres:5432/agent_platform
+      AGENT_MODEL_PROVIDER_URL: http://model-gateway:9000
+      AGENT_POLICY_BUNDLE: default
+      AGENT_TENANT: tenant-local
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/api/v1/healthz || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 6
+      start_period: 10s
+
+  worker:
+    build:
+      context: ../..
+      dockerfile: apps/worker/Dockerfile
+    environment:
+      WORKER_ID: worker-local-1
+      WORKER_LEASE_MS: "900000"
+      WORKER_MAX_ATTEMPTS: "3"
+      AGENT_STATE_STORE_URL: postgres://agent_platform:local_development_only@postgres:5432/agent_platform
+      AGENT_MODEL_PROVIDER_URL: http://model-gateway:9000
+      AGENT_CONNECTOR_ENDPOINT: http://connector-stub:9100
+      AGENT_POLICY_BUNDLE: default
+      AGENT_TENANT: tenant-local
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+volumes:
+  postgres-data:
+  redis-data:

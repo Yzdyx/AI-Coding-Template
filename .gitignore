@@ -1,0 +1,52 @@
+# ---- Node / TypeScript ----
+node_modules/
+dist/
+build/
+coverage/
+*.tsbuildinfo
+.npm/
+.pnpm-store/
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+
+# ---- Secrets and local overrides ----
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+/.claude/settings.local.json
+/.codex/settings/settings.local.json
+
+# ---- Terraform / infra ----
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+crash.log
+*.tfvars
+!*.tfvars.example
+
+# ---- Local runtime state ----
+.agent-state/
+logs/
+*.log
+tmp/
+scratch/
+
+# ---- Editors and OS ----
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.DS_Store
+Thumbs.db

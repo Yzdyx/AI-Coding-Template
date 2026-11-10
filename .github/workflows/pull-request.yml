@@ -1,0 +1,68 @@
+name: pull-request
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  repository-checks:
+    name: repository checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: architecture
+        run: python scripts/check-architecture.py
+      - name: agent manifests
+        run: python scripts/check-agent-manifests.py
+      - name: documentation links
+        run: python scripts/check-doc-links.py
+
+  typescript:
+    name: typescript
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm -r typecheck
+      - run: pnpm -r lint
+      - run: pnpm -r test
+
+  python:
+    name: python
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: agent tests
+        run: |
+          set -e
+          for dir in agents/*/; do
+            agent="$(basename "$dir")"
+            echo "== $agent =="
+            python -m unittest discover -s "agents/$agent/tests" -t "agents/$agent" -p "test_*.py"
+          done
+      - name: contract tests
+        run: python -m unittest discover -s tests/contracts -p "test_*.py"
+      - name: end-to-end tests
+        run: python -m unittest discover -s tests/end-to-end -p "test_*.py"

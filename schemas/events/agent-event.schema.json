@@ -1,0 +1,123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.example.com/events/agent-event.schema.json",
+  "title": "Agent Event",
+  "description": "Envelope for every event an agent runtime emits. Producers write one event per state transition; consumers (audit, evaluation, dashboards) read the envelope without parsing the payload. Additive fields require a schema version bump; consumers must ignore payload keys they do not know.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "event_id",
+    "event_type",
+    "occurred_at",
+    "run_id",
+    "agent",
+    "payload",
+    "trace_id"
+  ],
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 64,
+      "pattern": "^[A-Za-z0-9_-]+$",
+      "description": "Unique identifier of this event. Consumers deduplicate on it, because at-least-once delivery is allowed."
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "run.queued",
+        "run.started",
+        "run.completed",
+        "run.failed",
+        "run.cancelled",
+        "step.started",
+        "step.completed",
+        "model.completed",
+        "tool.requested",
+        "tool.completed",
+        "tool.denied",
+        "policy.evaluated",
+        "approval.requested",
+        "approval.decided",
+        "checkpoint.written"
+      ],
+      "description": "Kind of state transition. The value determines which payload fields are meaningful."
+    },
+    "occurred_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC 3339 timestamp in UTC with an explicit offset, for example 2026-01-31T08:15:04Z. It is the time the transition happened, not the time the event was written."
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "description": "Identifier of the agent run this event belongs to. Events of one run share this value and are ordered by the sequence number in the payload."
+    },
+    "agent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "description": "The agent definition that produced the event. The pair pins the exact versioned manifest, so a quality regression can be traced to a definition change.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 64,
+          "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+          "description": "Agent name, equal to the directory name under agents/ and to the manifest name field."
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "description": "Version of the agent manifest in force for this run."
+        }
+      }
+    },
+    "payload": {
+      "type": "object",
+      "description": "Event-type-specific body. It carries identifiers and measurements only: never credentials, never raw customer records, never full prompt text. Secrets and personal data are referenced by identifier and resolved at read time under policy.",
+      "properties": {
+        "sequence": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Monotonic per-run sequence number, starting at zero. It makes the event stream orderable without trusting timestamps."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "running", "succeeded", "failed", "denied", "cancelled"],
+          "description": "State the run or step moved into, when the event reports a transition."
+        },
+        "step_index": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Zero-based index of the agent step this event belongs to."
+        },
+        "tool_name": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "Tool that was requested, completed, or denied."
+        },
+        "duration_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Wall-clock duration of the measured operation, in milliseconds."
+        },
+        "error_code": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "Stable machine-readable failure code. Human-readable detail stays in the log line, not in the event."
+        },
+        "attributes": {
+          "type": "object",
+          "description": "Small map of scalar attributes for this event type, for example {\"model\": \"gpt-5-codex\", \"attempts\": 2}. Values are strings, numbers, or booleans."
+        }
+      }
+    },
+    "trace_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{32}$",
+      "description": "W3C Trace Context trace identifier, lower-case hexadecimal, 32 characters. It joins this event to the model and tool spans of the same run."
+    }
+  }
+}

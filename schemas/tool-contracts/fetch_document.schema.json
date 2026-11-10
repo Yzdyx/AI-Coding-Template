@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.example.com/tool-contracts/fetch_document.schema.json",
+  "title": "fetch_document tool contract",
+  "description": "Input and output contract for the fetch_document tool of the research agent. Read-only: the tool retrieves one document by identifier and performs no write.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "document_id"
+  ],
+  "properties": {
+    "document_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "description": "Identifier returned by the search tool."
+    },
+    "max_bytes": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1048576,
+      "description": "Upper bound on the returned body size, in bytes."
+    },
+    "degraded": {
+      "type": "boolean",
+      "description": "Output only. True when the body was truncated or the upstream timed out."
+    }
+  },
+  "x-risk": "low",
+  "x-side-effecting": false,
+  "x-idempotent": true
+}

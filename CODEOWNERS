@@ -1,0 +1,60 @@
+# CODEOWNERS
+#
+# Path-level ownership for review routing.
+# This file is ownership METADATA only. Enforced approval requires branch
+# protection rules on the repository platform. See docs/operations/.
+#
+# Team handles below are placeholders. Replace them with real team slugs
+# before enabling required reviews.
+
+# ---- Default owner ----
+*                                   @architecture-team
+
+# ---- Repository knowledge layer ----
+/AGENTS.md                          @platform-team @architecture-team
+/ARCHITECTURE.md                    @architecture-team
+/README.md                          @architecture-team
+/docs/architecture/                 @architecture-team
+/docs/design-docs/                  @architecture-team
+/docs/product-specs/                @product-team
+/docs/exec-plans/                   @platform-team
+/docs/operations/                   @sre-team
+/docs/security/                     @security-team
+/docs/generated/                    @architecture-team
+/docs/QUALITY_SCORE.md              @quality-team
+/docs/RELIABILITY.md                @sre-team
+/docs/SECURITY.md                   @security-team
+
+# ---- Coding-agent capability layer ----
+/.agents/skills/                    @platform-team
+/.codex/                            @platform-team
+/.codex/rules/                      @architecture-team
+/.codex/hooks/                      @platform-team
+
+# ---- Business agent layer ----
+/agents/research-agent/             @research-platform
+/agents/support-agent/              @support-team
+
+# ---- Shared platform layer ----
+/packages/agent-contracts/          @platform-team
+/packages/tool-adapters/            @platform-integration
+/packages/policy-engine/            @security-team
+/packages/state-store/              @platform-team
+/packages/observability/            @sre-team
+/packages/eval-kit/                 @quality-team
+/schemas/                           @platform-team
+
+# ---- Applications ----
+/apps/agent-api/                    @app-team
+/apps/admin-console/                @app-team
+/apps/worker/                       @app-team
+
+# ---- Governance and delivery ----
+/.github/workflows/                 @platform-team @sre-team
+/.github/agents/                    @platform-team
+/.github/instructions/              @platform-team
+/infra/                             @sre-team
+/evals/                             @quality-team
+/tests/                             @quality-team
+/scripts/                           @platform-team
+/tooling/                           @platform-team

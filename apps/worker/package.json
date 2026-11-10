@@ -1,0 +1,40 @@
+{
+  "name": "@agent-platform/worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Background worker that claims agent tasks, runs them, and checkpoints progress (Runtime layer).",
+  "license": "UNLICENSED",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "tsc --build tsconfig.json",
+    "dev": "tsc --build tsconfig.json --watch",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "node --test",
+    "lint": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@agent-platform/agent-contracts": "workspace:*",
+    "@agent-platform/observability": "workspace:*",
+    "@agent-platform/policy-engine": "workspace:*",
+    "@agent-platform/state-store": "workspace:*",
+    "@agent-platform/tool-adapters": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "typescript": "^5.6.3"
+  }
+}

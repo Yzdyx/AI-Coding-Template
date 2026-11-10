@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.example.com/tool-contracts/kb_lookup.schema.json",
+  "title": "kb_lookup tool contract",
+  "description": "Input and output contract for the kb_lookup tool of the support agent. Read-only: it searches the internal knowledge base and returns matching articles.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "question"
+  ],
+  "properties": {
+    "question": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "description": "The customer question, as text."
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 25,
+      "description": "Maximum number of articles to return."
+    }
+  },
+  "x-risk": "low",
+  "x-side-effecting": false,
+  "x-idempotent": true
+}

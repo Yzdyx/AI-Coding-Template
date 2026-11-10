@@ -1,0 +1,127 @@
+name: release
+
+# Promotion runs in one direction: dev -> staging -> prod. Each stage is a GitHub
+# environment. The `prod` environment holds the approval gate, so the prod job
+# waits for a human even when every earlier stage passed.
+#
+# This workflow validates and gates a release. It does not deploy: the platform
+# pipeline applies the artifact. The workflow records the decision and the
+# rollback target, and it fails closed when a gate is not satisfied.
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      rollback:
+        description: Run the rollback job instead of the promotion
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  gate:
+    name: release gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: repository checks
+        run: |
+          python scripts/check-architecture.py
+          python scripts/check-agent-manifests.py
+          python scripts/check-doc-links.py
+
+      - name: version record
+        run: |
+          python - <<'PY'
+          import json, pathlib, sys
+          record = pathlib.Path("evals/baselines/baseline-2026-01.json")
+          data = json.loads(record.read_text(encoding="utf-8"))
+          required = ["revision", "manifest_version", "prompt_hash", "model", "baseline"]
+          missing = [key for key in required if key not in data]
+          if missing:
+              print(f"release: the version record is incomplete: {missing}", file=sys.stderr)
+              sys.exit(1)
+          print("release: version record complete")
+          PY
+
+  deploy-dev:
+    name: deploy dev
+    needs: gate
+    if: ${{ !inputs.rollback }}
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - uses: actions/checkout@v4
+      - name: record the rollback target
+        run: |
+          echo "Record the currently deployed version as the rollback target."
+          echo "Deployment is performed by the platform pipeline, not by this workflow."
+      - name: smoke gate
+        run: |
+          echo "Verify the dev health gate: error rate, P95 latency, smoke evaluation."
+          echo "Stop the promotion when a gate fails."
+
+  deploy-staging:
+    name: deploy staging
+    needs: deploy-dev
+    if: ${{ !inputs.rollback }}
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v4
+      - name: record the rollback target
+        run: |
+          echo "Record the currently deployed version as the rollback target."
+      - name: staging gate
+        run: |
+          echo "Every release line is rolled back here at least once before production."
+
+  deploy-prod:
+    name: deploy prod
+    needs: deploy-staging
+    if: ${{ !inputs.rollback }}
+    runs-on: ubuntu-latest
+    # The approval gate. A human approves before this job starts.
+    environment: prod
+    steps:
+      - uses: actions/checkout@v4
+      - name: confirm the approver
+        run: |
+          echo "An approver must be recorded in the release ticket before this stage starts."
+      - name: roll out in stages
+        run: |
+          echo "Roll out stage by stage. Verify the health gate after each stage."
+          echo "Stop and roll back at the first failed gate."
+
+  rollback:
+    name: rollback
+    needs: gate
+    if: ${{ inputs.rollback }}
+    runs-on: ubuntu-latest
+    # A rollback of production is an approval-gated operation too.
+    environment: prod
+    steps:
+      - uses: actions/checkout@v4
+      - name: roll back to the last verified version
+        run: |
+          echo "Read the previous verified version from the release record."
+          echo "Apply it, then verify: version, error rate, P95 latency, in-flight tasks."
+          echo "The procedure is in docs/operations/runbooks/rollback.md."
+      - name: record the rollback
+        run: |
+          echo "Record the cause, the time and the operator in the release ticket."
+          echo "Add the failing case to evals/regression/."

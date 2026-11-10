@@ -1,0 +1,27 @@
+# Manifest for the research agent.
+# Contract: schemas/agent-manifest.schema.json
+# This file is a versioned artifact. Change it through a pull request.
+
+name: research-agent
+version: 0.1.0
+owner: research-platform
+description: Answers research questions by retrieving internal documents and synthesising a cited answer
+
+model:
+  provider: internal
+  name: gpt-5-codex
+  temperature: 0.2
+
+tools:
+  - search
+  - fetch_document
+
+limits:
+  max_steps: 24
+  timeout_seconds: 600
+
+tests:
+  - tests/unit
+  - tests/integration
+  - tests/eval/smoke.yaml
+  - tests/safety

@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.example.com/tool-contracts/draft_reply.schema.json",
+  "title": "draft_reply tool contract",
+  "description": "Input and output contract for the draft_reply tool of the support agent. It creates a reply draft for human review. It never sends the reply, and it is high risk because a draft can reach a customer.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "ticket_id",
+    "body",
+    "idempotency_key"
+  ],
+  "properties": {
+    "ticket_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "description": "Ticket the draft belongs to."
+    },
+    "body": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000,
+      "description": "Draft text. A human reviews it before sending."
+    },
+    "idempotency_key": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "Required. A repeated key returns the first draft instead of creating a second one."
+    }
+  },
+  "x-risk": "high",
+  "x-side-effecting": true,
+  "x-idempotent": true,
+  "x-requires-approval": true
+}

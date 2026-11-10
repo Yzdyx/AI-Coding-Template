@@ -1,0 +1,48 @@
+# Orchestration graph for the research agent.
+# This is a description of the run loop in src/main.py, kept next to the code so
+# a reviewer can compare the two. It is not executed by the runtime.
+workflow: retrieval
+version: 0.1.0
+agent: research-agent
+entry: plan
+nodes:
+  plan:
+    kind: model
+    description: Decide whether to search, fetch, answer or refuse
+    next: [search, fetch, answer, refuse]
+  search:
+    kind: tool
+    tool: search
+    risk: low
+    idempotent: true
+    next: [read]
+  fetch:
+    kind: tool
+    tool: fetch_document
+    risk: low
+    idempotent: true
+    next: [read]
+  read:
+    kind: model
+    description: Judge whether the retrieved documents answer the task
+    next: [plan]
+  answer:
+    kind: terminal
+    status: succeeded
+  refuse:
+    kind: terminal
+    status: refused
+  approval:
+    kind: gate
+    description: Human approval before any high-risk tool call
+    blocks: [write, notify]
+limits:
+  max_steps: 24
+  timeout_seconds: 600
+checkpoints:
+  after: every_step
+  store: packages/state-store
+degradation:
+  trigger: search_timeout
+  behaviour: return_partial_results
+  marker: degraded

@@ -1,0 +1,6 @@
+# Workspace definition. Only JavaScript and TypeScript packages are members.
+# The Python modules under agents/ are not workspace members: they have no
+# package.json and they are exercised by unittest, not by pnpm.
+packages:
+  - "apps/*"
+  - "packages/*"

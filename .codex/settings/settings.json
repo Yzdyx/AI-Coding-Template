@@ -1,0 +1,28 @@
+{
+  "$schema": "https://schemas.internal.example.com/agent-settings.json",
+  "workspace": {
+    "defaultBranch": "main",
+    "protectedPaths": [
+      "infra/environments/prod/**",
+      ".github/workflows/**",
+      "CODEOWNERS",
+      "infra/policies/**"
+    ],
+    "maxChangedFilesPerTask": 40
+  },
+  "agents": {
+    "defaultProfile": "workspace-write",
+    "allowedSkillRoots": [".agents/skills"],
+    "denyReadPaths": ["**/.env", "**/*.pem", "**/*.key", "**/secrets/**"],
+    "requirePlanForCrossModuleChange": true
+  },
+  "validation": {
+    "requiredCommands": [
+      "pnpm -r lint",
+      "pnpm -r typecheck",
+      "pnpm -r test",
+      "python scripts/check-architecture.py",
+      "python scripts/check-doc-links.py"
+    ]
+  }
+}

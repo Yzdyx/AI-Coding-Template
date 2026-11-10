@@ -1,0 +1,76 @@
+# Codex project configuration.
+#
+# This is a template. It contains no real credentials and no production
+# endpoints. Copy the values you need into your own environment.
+#
+# Precedence: command-line flags > environment variables > this file.
+# Local overrides belong in a personal config outside the repository.
+
+# ---------------------------------------------------------------------------
+# Model selection
+# ---------------------------------------------------------------------------
+
+# Use a pinned model identifier so agent runs stay reproducible.
+model = "gpt-5-codex"
+model_reasoning_effort = "high"
+
+# Keep provider settings out of the repository when they hold credentials.
+# model_provider = "openai"
+
+# ---------------------------------------------------------------------------
+# Execution policy
+# ---------------------------------------------------------------------------
+
+# Agent actions that touch the network or the filesystem need approval.
+# Allowed values: "untrusted" | "on-failure" | "on-request" | "never"
+approval_policy = "on-request"
+
+# Allowed values: "read-only" | "workspace-write" | "danger-full-access"
+sandbox_mode = "workspace-write"
+
+[sandbox_workspace_write]
+# Writes are limited to the repository plus the paths below.
+network_access = false
+writable_roots = ["."]
+
+# ---------------------------------------------------------------------------
+# Context budget
+# ---------------------------------------------------------------------------
+
+[history]
+persistence = "save-all"
+
+[tui]
+notifications = true
+
+# ---------------------------------------------------------------------------
+# MCP servers used by coding agents
+# ---------------------------------------------------------------------------
+
+[mcp_servers.filesystem]
+command = "npx"
+args = ["-y", "@modelcontextprotocol/server-filesystem", "."]
+
+[mcp_servers.github]
+command = "npx"
+args = ["-y", "@modelcontextprotocol/server-github"]
+
+[mcp_servers.github.env]
+GITHUB_PERSONAL_ACCESS_TOKEN = "${GITHUB_TOKEN}"
+
+# ---------------------------------------------------------------------------
+# Named profiles
+# ---------------------------------------------------------------------------
+
+[profiles.review]
+approval_policy = "never"
+sandbox_mode = "read-only"
+
+[profiles.implementation]
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+
+[profiles.release]
+approval_policy = "on-request"
+sandbox_mode = "read-only"
+model_reasoning_effort = "medium"

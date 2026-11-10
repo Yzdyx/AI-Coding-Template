@@ -1,0 +1,29 @@
+# Policy bundle descriptor.
+#
+# The tool gateway loads a bundle by name. The bundle lists the policy sources
+# that make up the decision, and the fail-closed behaviour of each one.
+# Referenced by docs/QUALITY_SCORE.md, docs/RELIABILITY.md and docs/SECURITY.md.
+
+bundle: default
+version: 0.1.0
+owner: security-team
+fail_closed: true
+
+sources:
+  - id: agent-tool-access
+    file: agent-tool-access.rego
+    package: agent.tool.access
+    decision: allow
+    default: false
+    description: Tool access per agent manifest, risk level, tenant and approval record.
+
+evaluation:
+  input: subject, agent, call, approvals, trace_id
+  deny_when_unavailable: true
+  timeout_ms: 50
+  cache_ttl_seconds: 0
+
+requirements:
+  - A high risk call must carry an approval record for the same run and tool.
+  - A call at medium or high risk must carry an idempotency key.
+  - The tenant comes from the authenticated subject. A caller supplied tenant is ignored.

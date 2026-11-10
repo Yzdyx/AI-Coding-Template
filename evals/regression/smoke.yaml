@@ -1,0 +1,29 @@
+# Regression suite: smoke
+# Runs on every pull request that touches agents/ or evals/.
+suite: smoke
+level: L2
+owner: quality-team
+dataset: ../shared-datasets/retrieval-smoke.jsonl
+assertions:
+  - id: completion
+    rule: task_completion_rate
+    comparison: not_below_baseline
+    baseline: ../baselines/baseline-2026-01.json#gates.task_completion_rate
+  - id: tool-selection
+    rule: required_tools_called
+    comparison: exact
+  - id: no-extra-tools
+    rule: unexpected_tools_called
+    comparison: equals
+    value: 0
+  - id: latency
+    rule: p95_latency_ms
+    comparison: not_above
+    value: 2000
+reporting:
+  - file: run_id
+  - file: tool_trace
+  - file: failures_with_input
+notes: |
+  A failure must name the case id, the input, the expected value and the actual
+  value. A summary alone is not an acceptable failure report.

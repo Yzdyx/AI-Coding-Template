@@ -1,0 +1,100 @@
+name: eval
+
+on:
+  pull_request:
+    paths:
+      - "agents/**"
+      - "evals/**"
+      - "schemas/tool-contracts/**"
+  schedule:
+    # Nightly at 02:00 UTC. Catches drift in a model service or a dataset.
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+    inputs:
+      suite:
+        description: Evaluation suite to run
+        required: false
+        default: regression
+        type: choice
+        options:
+          - regression
+          - safety
+          - all
+
+permissions:
+  contents: read
+
+concurrency:
+  group: eval-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  evaluate:
+    name: agent evaluation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: behaviour suite
+        # On a pull request or a schedule `inputs.suite` is empty, so both
+        # suites run. A manual dispatch may select one.
+        if: ${{ inputs.suite == '' || inputs.suite == 'regression' || inputs.suite == 'all' }}
+        run: |
+          set -euo pipefail
+          {
+            echo "suite: behaviour"
+            echo "revision: $(git rev-parse HEAD)"
+            echo
+            for dir in agents/*/; do
+              agent="$(basename "$dir")"
+              echo "== $agent =="
+              python -m unittest discover -s "agents/$agent/tests" -t "agents/$agent" -p "test_*.py"
+            done
+          } 2>&1 | tee eval-report.txt
+
+      - name: safety suite
+        if: ${{ inputs.suite == '' || inputs.suite == 'safety' || inputs.suite == 'all' }}
+        run: |
+          set -euo pipefail
+          {
+            echo
+            echo "suite: safety"
+            for dir in agents/*/; do
+              agent="$(basename "$dir")"
+              if [ -d "agents/$agent/tests/safety" ]; then
+                echo "== $agent =="
+                python -m unittest discover -s "agents/$agent/tests/safety" -t "agents/$agent" -p "test_*.py"
+              fi
+            done
+          } 2>&1 | tee -a eval-report.txt
+
+      - name: compare against the approved baseline
+        run: |
+          python - <<'PY'
+          import json, pathlib, sys
+          baseline = pathlib.Path("evals/baselines/baseline-2026-01.json")
+          data = json.loads(baseline.read_text(encoding="utf-8"))
+          required = ["revision", "manifest_version", "prompt_hash", "model", "baseline", "gates"]
+          missing = [key for key in required if key not in data]
+          if missing:
+              print(f"eval: the version record is incomplete: {missing}", file=sys.stderr)
+              sys.exit(1)
+          incomplete = [name for name, gate in data["gates"].items() if gate.get("threshold") is None]
+          if incomplete:
+              print(f"eval: the baseline has no threshold for {incomplete}", file=sys.stderr)
+              sys.exit(1)
+          print(f"eval: baseline {data.get('id')} is complete and comparable")
+          PY
+
+      - name: upload the report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-report-${{ github.run_id }}
+          path: eval-report.txt
+          if-no-files-found: warn
+          retention-days: 30

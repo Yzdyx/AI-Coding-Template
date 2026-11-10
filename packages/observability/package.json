@@ -1,0 +1,27 @@
+{
+  "name": "@agent-platform/observability",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Telemetry provider: tracing, metrics and structured logging with payload redaction (Service layer).",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=22"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "types": "./src/index.ts",
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.json",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "@agent-platform/agent-contracts": "workspace:*"
+  }
+}

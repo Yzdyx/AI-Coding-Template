@@ -1,0 +1,25 @@
+# Manifest for the support agent.
+# Contract: schemas/agent-manifest.schema.json
+# This file is a versioned artifact. Change it through a pull request.
+
+name: support-agent
+version: 0.1.0
+owner: support-team
+description: Answers customer-support questions from the internal knowledge base and drafts a reply for a human to send
+
+model:
+  provider: internal
+  name: gpt-5-codex
+  temperature: 0.1
+
+tools:
+  - kb_lookup
+  - draft_reply
+
+limits:
+  max_steps: 16
+  timeout_seconds: 300
+
+tests:
+  - tests/unit
+  - tests/eval/smoke.yaml

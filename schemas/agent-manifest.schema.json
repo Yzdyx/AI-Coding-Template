@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.example.com/agent-manifest.schema.json",
+  "title": "Agent Manifest",
+  "description": "Contract for agents/<agent-name>/agent.yaml. One manifest describes exactly one business agent: its identity, its owning team, the model it runs on, the tools it may call, its hard runtime limits, and where its tests live. The manifest is a versioned artifact; it changes only through a pull request.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "name",
+    "version",
+    "owner",
+    "description",
+    "model",
+    "tools",
+    "limits"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 64,
+      "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+      "description": "Agent identifier in lower kebab case. It must be identical to the directory name under agents/, because the runtime resolves the agent from the directory it was loaded from."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "Semantic version of the agent definition. Bump the patch for prompt or tool changes, the minor for additive capability, the major for a breaking contract change."
+    },
+    "owner": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 64,
+      "pattern": "^[a-z0-9][a-z0-9-]*$",
+      "description": "Owning team handle in lower kebab case, for example research-platform. The handle must appear in CODEOWNERS."
+    },
+    "description": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 500,
+      "description": "One-line statement of what the agent does and for whom. Plain text, no trailing period required."
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "name", "temperature"],
+      "description": "Model selection applied to every run of this agent unless a run overrides it through an approved policy bundle.",
+      "properties": {
+        "provider": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "description": "Model provider identifier, for example openai, anthropic, azure-openai, bedrock, vertex, or internal."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$",
+          "description": "Model identifier as the provider names it, for example gpt-5-codex. Never a URL and never a credential."
+        },
+        "temperature": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 2,
+          "description": "Sampling temperature. Analytical agents stay at or below 0.3; creative drafting may go higher."
+        }
+      }
+    },
+    "tools": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "uniqueItems": true,
+      "description": "Tools the agent may call. Every name must resolve to a contract under schemas/tool-contracts/ or to an implementation under the agent's own tools/ directory. A tool that is not listed here must be denied by the policy engine at call time.",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 64,
+        "pattern": "^[a-z][a-z0-9_-]*$"
+      }
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_steps", "timeout_seconds"],
+      "description": "Hard runtime bounds. The runtime stops a run that exceeds either bound and records the stop as a run event.",
+      "properties": {
+        "max_steps": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 500,
+          "description": "Maximum number of agent steps (model calls plus tool calls) in a single run."
+        },
+        "timeout_seconds": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 86400,
+          "description": "Maximum wall-clock duration of a single run, in seconds."
+        }
+      }
+    },
+    "tests": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "description": "Repository-relative paths to the agent's test suites, for example tests/unit or tests/eval/smoke.yaml. The verification skill reads this list to decide what to run for a change to this agent.",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 200,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._/-]*$"
+      }
+    }
+  }
+}

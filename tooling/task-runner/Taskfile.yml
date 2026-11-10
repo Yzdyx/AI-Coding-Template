@@ -1,0 +1,109 @@
+# Task definitions for go-task (https://taskfile.dev).
+#
+# Every task wraps a real repository command. It never reimplements one, and it
+# always prints the command it ran, so the output is reproducible by hand.
+#
+#   task            # list the tasks
+#   task checks     # the three repository checks
+#   task verify     # every quality gate
+
+version: "3"
+
+vars:
+  AGENTS: '{{.AGENTS | default "research-agent support-agent"}}'
+
+tasks:
+  default:
+    desc: List the available tasks
+    cmds:
+      - task --list
+
+  setup:
+    desc: Install the workspace dependencies
+    cmds:
+      - pnpm install --frozen-lockfile
+
+  lint:
+    desc: Static check every workspace package
+    cmds:
+      - pnpm -r lint
+
+  typecheck:
+    desc: Type check every workspace package
+    cmds:
+      - pnpm -r typecheck
+
+  test:
+    desc: Run every workspace test
+    cmds:
+      - pnpm -r test
+
+  agents:
+    desc: Run every agent test suite
+    cmds:
+      - |
+        set -e
+        for agent in {{.AGENTS}}; do
+          echo "== $agent =="
+          python -m unittest discover -s "agents/$agent/tests" -t "agents/$agent" -p "test_*.py"
+        done
+
+  contracts:
+    desc: Run the contract tests
+    cmds:
+      - python -m unittest discover -s tests/contracts -p "test_*.py"
+      - python -m unittest discover -s tests/end-to-end -p "test_*.py"
+
+  architecture:
+    desc: Check the layering and dependency rules
+    cmds:
+      - python scripts/check-architecture.py
+
+  manifests:
+    desc: Validate every agents/*/agent.yaml
+    cmds:
+      - python scripts/check-agent-manifests.py
+
+  docs:
+    desc: Check documentation links and index reachability
+    cmds:
+      - python scripts/check-doc-links.py
+
+  checks:
+    desc: Run the three repository checks
+    deps: [architecture, manifests, docs]
+
+  verify:
+    desc: Run every quality gate
+    cmds:
+      - python .agents/skills/verify-change/scripts/verify.py --root .
+
+  eval:
+    desc: Run the agent evaluation suites
+    cmds:
+      - task: agents
+      - python -c "import json,pathlib; d=json.loads(pathlib.Path('evals/baselines/baseline-2026-01.json').read_text(encoding='utf-8')); print('baseline', d['id'], 'gates', len(d['gates']))"
+
+  impact:
+    desc: List the consumers of a module
+    requires:
+      vars: [MODULE]
+    cmds:
+      - python .agents/skills/impact-analysis/scripts/impact_analysis.py --root . --module {{.MODULE}}
+
+  dev:
+    desc: Start the local stack
+    cmds:
+      - docker compose -f tooling/local-dev/docker-compose.yml up -d
+
+  dev:down:
+    desc: Stop the local stack and remove its volumes
+    cmds:
+      - docker compose -f tooling/local-dev/docker-compose.yml down -v
+
+  clean:
+    desc: Remove local build and cache artifacts
+    cmds:
+      - find . -name "__pycache__" -type d -not -path "./.git/*" -prune -exec rm -rf {} +
+      - find . -name "*.pyc" -delete
+      - rm -rf apps/*/dist packages/*/dist

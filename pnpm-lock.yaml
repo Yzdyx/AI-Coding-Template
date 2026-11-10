@@ -1,0 +1,138 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    devDependencies:
+      typescript:
+        specifier: ^5.6.3
+        version: 5.9.3
+
+  apps/admin-console:
+    dependencies:
+      '@agent-platform/agent-contracts':
+        specifier: workspace:*
+        version: link:../../packages/agent-contracts
+    devDependencies:
+      '@types/node':
+        specifier: ^22.9.0
+        version: 22.20.5
+      typescript:
+        specifier: ^5.6.3
+        version: 5.9.3
+
+  apps/agent-api:
+    dependencies:
+      '@agent-platform/agent-contracts':
+        specifier: workspace:*
+        version: link:../../packages/agent-contracts
+      '@agent-platform/observability':
+        specifier: workspace:*
+        version: link:../../packages/observability
+      '@agent-platform/policy-engine':
+        specifier: workspace:*
+        version: link:../../packages/policy-engine
+      '@agent-platform/state-store':
+        specifier: workspace:*
+        version: link:../../packages/state-store
+      '@agent-platform/tool-adapters':
+        specifier: workspace:*
+        version: link:../../packages/tool-adapters
+    devDependencies:
+      '@types/node':
+        specifier: ^22.9.0
+        version: 22.20.5
+      typescript:
+        specifier: ^5.6.3
+        version: 5.9.3
+
+  apps/worker:
+    dependencies:
+      '@agent-platform/agent-contracts':
+        specifier: workspace:*
+        version: link:../../packages/agent-contracts
+      '@agent-platform/observability':
+        specifier: workspace:*
+        version: link:../../packages/observability
+      '@agent-platform/policy-engine':
+        specifier: workspace:*
+        version: link:../../packages/policy-engine
+      '@agent-platform/state-store':
+        specifier: workspace:*
+        version: link:../../packages/state-store
+      '@agent-platform/tool-adapters':
+        specifier: workspace:*
+        version: link:../../packages/tool-adapters
+    devDependencies:
+      '@types/node':
+        specifier: ^22.9.0
+        version: 22.20.5
+      typescript:
+        specifier: ^5.6.3
+        version: 5.9.3
+
+  packages/agent-contracts: {}
+
+  packages/eval-kit:
+    dependencies:
+      '@agent-platform/agent-contracts':
+        specifier: workspace:*
+        version: link:../agent-contracts
+
+  packages/observability:
+    dependencies:
+      '@agent-platform/agent-contracts':
+        specifier: workspace:*
+        version: link:../agent-contracts
+
+  packages/policy-engine:
+    dependencies:
+      '@agent-platform/agent-contracts':
+        specifier: workspace:*
+        version: link:../agent-contracts
+
+  packages/state-store:
+    dependencies:
+      '@agent-platform/agent-contracts':
+        specifier: workspace:*
+        version: link:../agent-contracts
+
+  packages/tool-adapters:
+    dependencies:
+      '@agent-platform/agent-contracts':
+        specifier: workspace:*
+        version: link:../agent-contracts
+    devDependencies:
+      '@types/node':
+        specifier: ^22.9.0
+        version: 22.20.5
+      typescript:
+        specifier: ^5.6.3
+        version: 5.9.3
+
+packages:
+
+  '@types/node@22.20.5':
+    resolution: {integrity: sha512-U2+DNr+wSjpsTS/wZGYHq7GcwfuSmKiKvoPvK22zwTlRhU91yOniN4qRR5KhIjvif7ysw/dz/hKmfDH0Ris4aA==}
+
+  typescript@5.9.3:
+    resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
+  undici-types@6.21.0:
+    resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
+
+snapshots:
+
+  '@types/node@22.20.5':
+    dependencies:
+      undici-types: 6.21.0
+
+  typescript@5.9.3: {}
+
+  undici-types@6.21.0: {}
