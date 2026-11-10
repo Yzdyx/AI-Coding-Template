@@ -28,7 +28,7 @@ specific documents and source files; they are not a required full reading list.
 
 ## Planning records
 
-- [Current documentation task](exec-plans/active/DOCS-0001-progressive-disclosure.md)
+- [Completed documentation and publication task](exec-plans/completed/DOCS-0001-progressive-disclosure.md)
 - [Active retrieval-timeout plan and metadata example](exec-plans/active/AGENT-1042-improve-retrieval-timeout.md)
 - [Completed rollout example](exec-plans/completed/AGENT-1001-tool-gateway-rollout.md)
 - [Technical debt register](exec-plans/tech-debt-tracker.md)

@@ -6,7 +6,7 @@
 task_id: DOCS-0001
 title: Document the repository with progressive disclosure
 owner_team: platform
-status: active
+status: completed
 scope:
   paths:
     - AGENTS.md
@@ -103,6 +103,8 @@ adding scratch scripts to the repository:
 - Catalog versus Git candidate paths: `files=189 directories=100 missing=0 stale=0 duplicates=0`.
 - README parity: reciprocal language links, 23 shared link targets and identical
   check commands verified. All fragment links in the new entry points resolve.
+- The first catalog review flagged a terse console-directory description. It
+  was expanded; the complete coverage and navigation review then passed.
 - Both personal override files are excluded. Credential settings in the shared
   MCP templates are environment placeholders. Candidate credential-signature
   scan: `files=189 findings=0`; this bounded scan is not a full security audit.
@@ -119,6 +121,18 @@ The fetched remote tree contains only `README.md`, at commit
 that README and publishing directly to the default branch. Retain the remote
 commit as the parent and use a normal push; do not create a feature branch.
 
-Pending: publish the verified tree, check the remote SHA, then archive this plan
-and update its catalog and index links. Record publication completion only after
-the remote has accepted the commit.
+The verified project was published as commit
+`69d5438011376cc8440c32cdd4e89ce8a47f4b32`, with the original remote commit as
+its parent. `git push --dry-run origin main:main` succeeded, followed by
+`git push --set-upstream origin main:main`. `git ls-remote origin refs/heads/main`
+returned the same project commit SHA. The repository now tracks `origin/main`.
+
+`git diff --cached --check` reported no whitespace errors. Git preparation
+initially rejected a command-scoped `core.excludesFile=NUL` override; using an
+empty command-scoped override resolved it without changing global settings.
+The final project tree contains 189 files and excludes both personal overrides.
+
+This plan is archived after the project publication. Its catalog row and knowledge
+index link move with it. The archive update is verified with the same repository
+gates and published as a normal follow-up commit. No runtime contracts changed,
+no infrastructure was applied and no temporary scripts were retained.

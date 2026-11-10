@@ -128,9 +128,9 @@ acceptance evidence.
 | [docs/exec-plans/](exec-plans/) | Directory | Task scope, progress, decisions and technical debt. |
 | [docs/exec-plans/active/](exec-plans/active/) | Directory | Open task plans and the canonical metadata example. |
 | [docs/exec-plans/active/AGENT-1042-improve-retrieval-timeout.md](exec-plans/active/AGENT-1042-improve-retrieval-timeout.md) | File | Illustrative active retrieval-timeout plan and canonical metadata format; not current completion evidence. |
-| [docs/exec-plans/active/DOCS-0001-progressive-disclosure.md](exec-plans/active/DOCS-0001-progressive-disclosure.md) | File | Current documentation task scope, decisions and pending verification; archived when complete. |
 | [docs/exec-plans/completed/](exec-plans/completed/) | Directory | Archived plans with recorded decisions and evidence. |
 | [docs/exec-plans/completed/AGENT-1001-tool-gateway-rollout.md](exec-plans/completed/AGENT-1001-tool-gateway-rollout.md) | File | Illustrative historical gateway rollout plan; not acceptance evidence for this checkout. |
+| [docs/exec-plans/completed/DOCS-0001-progressive-disclosure.md](exec-plans/completed/DOCS-0001-progressive-disclosure.md) | File | Completed documentation and publication plan with decisions and real verification evidence. |
 | [docs/exec-plans/tech-debt-tracker.md](exec-plans/tech-debt-tracker.md) | File | Technical debt register with owners and follow-up conditions. |
 | [docs/FRONTEND.md](FRONTEND.md) | File | Frontend design, accessibility, state and component conventions. |
 | [docs/generated/](generated/) | Directory | Generated-asset area; current schema template has no implemented generator. |
