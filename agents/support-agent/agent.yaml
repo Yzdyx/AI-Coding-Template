@@ -4,7 +4,7 @@
 
 name: support-agent
 version: 0.1.0
-owner: support-team
+owner: yzdyx
 description: Answers customer-support questions from the internal knowledge base and drafts a reply for a human to send
 
 model:

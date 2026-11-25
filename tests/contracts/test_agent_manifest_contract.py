@@ -132,14 +132,14 @@ class ManifestShapeTests(unittest.TestCase):
     def test_owner_appears_in_codeowners(self) -> None:
         codeowners = (REPO_ROOT / "CODEOWNERS").read_text(encoding="utf-8")
         owners = {
-            token.lstrip("@")
+            token.lstrip("@").casefold()
             for line in codeowners.splitlines()
             if line.strip() and not line.strip().startswith("#")
             for token in line.split()[1:]
         }
         for name, manifest in MANIFESTS.items():
             with self.subTest(agent=name):
-                self.assertIn(manifest["owner"], owners)
+                self.assertIn(str(manifest["owner"]).casefold(), owners)
 
 
 class ManifestConsistencyTests(unittest.TestCase):

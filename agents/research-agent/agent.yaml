@@ -4,7 +4,7 @@
 
 name: research-agent
 version: 0.1.0
-owner: research-platform
+owner: yzdyx
 description: Answers research questions by retrieving internal documents and synthesising a cited answer
 
 model:

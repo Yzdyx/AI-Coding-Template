@@ -39,12 +39,16 @@ acceptance evidence.
 | [.mcp.json](../.mcp.json) | File | MCP server templates for filesystem, GitHub, Postgres and fetch; credentials use environment placeholders. |
 | [AGENTS.md](../AGENTS.md) | File | Root coding-agent constraints, progressive-disclosure routes and completion requirements. |
 | [ARCHITECTURE.md](../ARCHITECTURE.md) | File | System boundaries, layers, Provider interfaces and runtime requirements. |
-| [CODEOWNERS](../CODEOWNERS) | File | Path-based review ownership; team handles are template placeholders. |
+| [CODE_OF_CONDUCT.md](../CODE_OF_CONDUCT.md) | File | Community behavior standard, reporting route and enforcement boundaries. |
+| [CODEOWNERS](../CODEOWNERS) | File | Path-based review ownership with the current valid account and adopter replacement guidance. |
+| [CONTRIBUTING.md](../CONTRIBUTING.md) | File | Contribution setup, change workflow, quality commands, language, conduct and licensing rules. |
 | [package.json](../package.json) | File | Workspace metadata, Node/pnpm requirements and repository-level scripts. |
 | [pnpm-lock.yaml](../pnpm-lock.yaml) | File | Locked JavaScript dependency resolution for pnpm. |
 | [pnpm-workspace.yaml](../pnpm-workspace.yaml) | File | Workspace membership for apps and packages; Python agents are excluded. |
-| [README.md](../README.md) | File | English project overview, navigation, setup and template limits. |
-| [README.zh.md](../README.zh.md) | File | Chinese translation of the overview with a direct English language switch. |
+| [README.md](../README.md) | File | Primary English GitHub landing page with visual identity, status, architecture, setup, navigation and limits. |
+| [README.zh.md](../README.zh.md) | File | Chinese counterpart of the GitHub landing page with a direct English language switch. |
+| [SECURITY.md](../SECURITY.md) | File | Repository vulnerability-reporting policy and entry point to the detailed engineering security guide. |
+| [SUPPORT.md](../SUPPORT.md) | File | Support routes, issue-reporting expectations and the template's support boundary. |
 
 ## Coding tools
 
@@ -104,10 +108,14 @@ acceptance evidence.
 | [.github/instructions/docs.instructions.md](../.github/instructions/docs.instructions.md) | File | Documentation rules for English prose, indexes, links and lifecycle. |
 | [.github/instructions/python.instructions.md](../.github/instructions/python.instructions.md) | File | Python-scoped implementation and test conventions. |
 | [.github/instructions/typescript.instructions.md](../.github/instructions/typescript.instructions.md) | File | TypeScript-scoped module, type and dependency conventions. |
+| [.github/ISSUE_TEMPLATE/](../.github/ISSUE_TEMPLATE/) | Directory | GitHub issue forms and contact routes for reproducible defects and scoped feature proposals. |
+| [.github/ISSUE_TEMPLATE/bug_report.yml](../.github/ISSUE_TEMPLATE/bug_report.yml) | File | Structured issue form for reproducible non-security defects and real command evidence. |
+| [.github/ISSUE_TEMPLATE/config.yml](../.github/ISSUE_TEMPLATE/config.yml) | File | Issue chooser configuration routing users to documentation, support and private security reporting. |
+| [.github/ISSUE_TEMPLATE/feature_request.yml](../.github/ISSUE_TEMPLATE/feature_request.yml) | File | Structured issue form for scoped proposals, acceptance criteria and contract impact. |
 | [.github/PULL_REQUEST_TEMPLATE.md](../.github/PULL_REQUEST_TEMPLATE.md) | File | PR fields for scope, risks, contracts and verification evidence. |
 | [.github/workflows/](../.github/workflows/) | Directory | CI, evaluation and release-gate workflows. |
 | [.github/workflows/eval.yml](../.github/workflows/eval.yml) | File | PR, scheduled and manual evaluation workflow that records reports. |
-| [.github/workflows/pull-request.yml](../.github/workflows/pull-request.yml) | File | PR repository gates, TypeScript checks and Python tests. |
+| [.github/workflows/pull-request.yml](../.github/workflows/pull-request.yml) | File | Repository, TypeScript and Python gates for pull requests, main-branch pushes and manual runs. |
 | [.github/workflows/release.yml](../.github/workflows/release.yml) | File | Release evidence and environment approval workflow; deployment occurs separately. |
 
 ## Documentation
@@ -121,6 +129,9 @@ acceptance evidence.
 | [docs/architecture/adr/0002-single-repository-modular-monorepo.md](architecture/adr/0002-single-repository-modular-monorepo.md) | File | Decision and tradeoffs for a modular monorepo. |
 | [docs/architecture/dependency-rules.md](architecture/dependency-rules.md) | File | Permitted imports, forbidden edges and architecture-check rule codes. |
 | [docs/architecture/index.md](architecture/index.md) | File | Architecture routes, layer summary, Provider ownership and ADR links. |
+| [docs/assets/](assets/) | Directory | Versioned visual assets used by repository and community entry points. |
+| [docs/assets/repository-hero.svg](assets/repository-hero.svg) | File | Native vector banner for the English and Chinese GitHub landing pages. |
+| [docs/assets/social-preview.png](assets/social-preview.png) | File | PNG social-preview rendering of the repository hero for GitHub sharing metadata. |
 | [docs/design-docs/](design-docs/) | Directory | Design intent and engineering beliefs. |
 | [docs/design-docs/core-beliefs.md](design-docs/core-beliefs.md) | File | Engineering beliefs motivating architecture and progressive context loading. |
 | [docs/design-docs/index.md](design-docs/index.md) | File | Design intent, beliefs and role-specific reading routes. |
@@ -128,6 +139,7 @@ acceptance evidence.
 | [docs/exec-plans/](exec-plans/) | Directory | Task scope, progress, decisions and technical debt. |
 | [docs/exec-plans/active/](exec-plans/active/) | Directory | Open task plans and the canonical metadata example. |
 | [docs/exec-plans/active/AGENT-1042-improve-retrieval-timeout.md](exec-plans/active/AGENT-1042-improve-retrieval-timeout.md) | File | Illustrative active retrieval-timeout plan and canonical metadata format; not current completion evidence. |
+| [docs/exec-plans/active/DOCS-0002-complete-github-presence.md](exec-plans/active/DOCS-0002-complete-github-presence.md) | File | Active plan for homepage, community, CI, ownership, publication and remote-settings completion. |
 | [docs/exec-plans/completed/](exec-plans/completed/) | Directory | Archived plans with recorded decisions and evidence. |
 | [docs/exec-plans/completed/AGENT-1001-tool-gateway-rollout.md](exec-plans/completed/AGENT-1001-tool-gateway-rollout.md) | File | Illustrative historical gateway rollout plan; not acceptance evidence for this checkout. |
 | [docs/exec-plans/completed/DOCS-0001-progressive-disclosure.md](exec-plans/completed/DOCS-0001-progressive-disclosure.md) | File | Completed documentation and publication plan with decisions and real verification evidence. |

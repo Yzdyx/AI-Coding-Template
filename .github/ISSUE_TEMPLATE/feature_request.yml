@@ -1,0 +1,81 @@
+name: Feature request
+description: Propose a scoped improvement to the template, documentation, or reference implementation.
+title: "[Feature]: "
+body:
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Preflight
+      options:
+        - label: I searched existing issues and the indexed documentation.
+          required: true
+        - label: This proposal does not contain a security vulnerability or secret.
+          required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Proposed area
+      options:
+        - Coding-agent instructions or documentation
+        - GitHub Actions, issue forms, or repository governance
+        - Research agent
+        - Support agent
+        - Application or shared package
+        - Schema or public contract
+        - Evaluation
+        - Infrastructure or local tooling
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Describe the current limitation and who experiences it.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+      description: Describe the smallest useful change and the expected behavior.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Explain other approaches and why the proposal is preferable.
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: List observable conditions that would make the change complete.
+      placeholder: |
+        - [ ] ...
+        - [ ] ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Architecture, contracts, and migration impact
+      description: Identify affected modules, public contracts, providers, security boundaries, or compatibility concerns.
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Link prior art, examples, plans, or related issues.
+    validations:
+      required: false

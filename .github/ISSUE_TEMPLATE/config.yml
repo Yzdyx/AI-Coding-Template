@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Read the knowledge index
+    url: https://github.com/Yzdyx/AI-Coding-Template/blob/main/docs/index.md
+    about: Choose the task-specific guide before opening an issue.
+  - name: Support and usage guidance
+    url: https://github.com/Yzdyx/AI-Coding-Template/blob/main/SUPPORT.md
+    about: Learn what information to include and where questions belong.
+  - name: Security policy
+    url: https://github.com/Yzdyx/AI-Coding-Template/security/policy
+    about: Report vulnerabilities privately; do not disclose them in an issue.

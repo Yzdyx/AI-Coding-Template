@@ -40,7 +40,9 @@ translation. Keep both README language links and shared instructions in sync.
 | Plans, completed work and technical debt | [Planning guide](docs/PLANS.md) |
 | Maintenance procedures | [.agents/skills/](.agents/skills/) (open the selected `SKILL.md` only) |
 | Operations and runbooks | [Operations index](docs/operations/index.md) |
-| Security requirements | [Security guide](docs/SECURITY.md) |
+| Contribution and support routes | [Contributing](CONTRIBUTING.md), [support](SUPPORT.md) and [code of conduct](CODE_OF_CONDUCT.md) |
+| Vulnerability reporting | [Security policy](SECURITY.md) |
+| Security requirements | [Engineering security guide](docs/SECURITY.md) |
 | Agents, apps, packages, contracts and delivery assets | [Catalog by area](docs/repository-map.md#areas) |
 
 Nested `AGENTS.md` files exist under `agents/` and `apps/`. A deeper file
@@ -91,6 +93,9 @@ It may never weaken security, approval, or authorization requirements.
 - High-risk and irreversible actions require a human approval node.
 - Agent definitions, permissions, tool lists, and prompts are versioned
   artifacts. Change them through pull requests, like application code.
+- Keep public repository metadata factual. Do not claim production acceptance,
+  a security guarantee, an open-source license, or a live support commitment
+  without an owner decision and recorded evidence.
 
 ## Scope and Ownership
 

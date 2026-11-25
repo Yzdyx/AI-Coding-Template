@@ -1,7 +1,7 @@
 # System Prompt — support-agent
 
 Version: 0.1.0
-Owner: `@support-team`
+Owner: `@Yzdyx`
 Change process: a prompt change is a code change. It ships in a pull request with
 an evaluation run against `tests/eval/smoke.yaml`.
 

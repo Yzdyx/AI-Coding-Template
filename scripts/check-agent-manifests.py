@@ -177,7 +177,7 @@ def read_codeowners_owners(root: str) -> set[str]:
             if line == "":
                 continue
             for token in line.split()[1:]:
-                owners.add(token.lstrip("@"))
+                owners.add(token.lstrip("@").casefold())
     return owners
 
 
@@ -221,7 +221,7 @@ def main(argv: list[str]) -> int:
             )
 
         owner = document.get("owner")
-        if isinstance(owner, str) and owner not in owners:
+        if isinstance(owner, str) and owner.casefold() not in owners:
             findings.append((rel, 0, "MAN-004", f"owner {owner!r} does not appear in CODEOWNERS"))
 
         # A declared tool resolves either to a shared contract under

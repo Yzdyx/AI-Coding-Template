@@ -1,60 +1,62 @@
 # CODEOWNERS
 #
-# Path-level ownership for review routing.
-# This file is ownership METADATA only. Enforced approval requires branch
-# protection rules on the repository platform. See docs/operations/.
+# This public template currently belongs to one personal GitHub account. A
+# single valid owner makes review routing work immediately and is safe to use
+# with required CODEOWNER reviews.
 #
-# Team handles below are placeholders. Replace them with real team slugs
-# before enabling required reviews.
+# When adopting the template, replace @Yzdyx with the real user or @organization/team
+# handles. Teams must have explicit write access before GitHub can route reviews.
+# The path-specific entries below preserve the intended ownership boundaries.
+# Agent manifests use the case-insensitive account handle `yzdyx`; GitHub's
+# canonical display name is `Yzdyx`.
 
 # ---- Default owner ----
-*                                   @architecture-team
+*                                   @Yzdyx
+
+# ---- Repository and community guidance ----
+/AGENTS.md                          @Yzdyx
+/ARCHITECTURE.md                    @Yzdyx
+/CODE_OF_CONDUCT.md                 @Yzdyx
+/CONTRIBUTING.md                    @Yzdyx
+/README.md                          @Yzdyx
+/README.zh.md                       @Yzdyx
+/SECURITY.md                        @Yzdyx
+/SUPPORT.md                         @Yzdyx
 
 # ---- Repository knowledge layer ----
-/AGENTS.md                          @platform-team @architecture-team
-/ARCHITECTURE.md                    @architecture-team
-/README.md                          @architecture-team
-/docs/architecture/                 @architecture-team
-/docs/design-docs/                  @architecture-team
-/docs/product-specs/                @product-team
-/docs/exec-plans/                   @platform-team
-/docs/operations/                   @sre-team
-/docs/security/                     @security-team
-/docs/generated/                    @architecture-team
-/docs/QUALITY_SCORE.md              @quality-team
-/docs/RELIABILITY.md                @sre-team
-/docs/SECURITY.md                   @security-team
+/docs/architecture/                 @Yzdyx
+/docs/assets/                       @Yzdyx
+/docs/design-docs/                  @Yzdyx
+/docs/product-specs/                @Yzdyx
+/docs/exec-plans/                   @Yzdyx
+/docs/operations/                   @Yzdyx
+/docs/security/                     @Yzdyx
+/docs/generated/                    @Yzdyx
+/docs/QUALITY_SCORE.md              @Yzdyx
+/docs/RELIABILITY.md                @Yzdyx
+/docs/SECURITY.md                   @Yzdyx
 
 # ---- Coding-agent capability layer ----
-/.agents/skills/                    @platform-team
-/.codex/                            @platform-team
-/.codex/rules/                      @architecture-team
-/.codex/hooks/                      @platform-team
+/.agents/skills/                    @Yzdyx
+/.codex/                            @Yzdyx
 
 # ---- Business agent layer ----
-/agents/research-agent/             @research-platform
-/agents/support-agent/              @support-team
+/agents/                            @Yzdyx
 
 # ---- Shared platform layer ----
-/packages/agent-contracts/          @platform-team
-/packages/tool-adapters/            @platform-integration
-/packages/policy-engine/            @security-team
-/packages/state-store/              @platform-team
-/packages/observability/            @sre-team
-/packages/eval-kit/                 @quality-team
-/schemas/                           @platform-team
+/packages/                          @Yzdyx
+/schemas/                           @Yzdyx
 
 # ---- Applications ----
-/apps/agent-api/                    @app-team
-/apps/admin-console/                @app-team
-/apps/worker/                       @app-team
+/apps/                              @Yzdyx
 
 # ---- Governance and delivery ----
-/.github/workflows/                 @platform-team @sre-team
-/.github/agents/                    @platform-team
-/.github/instructions/              @platform-team
-/infra/                             @sre-team
-/evals/                             @quality-team
-/tests/                             @quality-team
-/scripts/                           @platform-team
-/tooling/                           @platform-team
+/.github/ISSUE_TEMPLATE/            @Yzdyx
+/.github/workflows/                 @Yzdyx
+/.github/agents/                    @Yzdyx
+/.github/instructions/              @Yzdyx
+/infra/                             @Yzdyx
+/evals/                             @Yzdyx
+/tests/                             @Yzdyx
+/scripts/                           @Yzdyx
+/tooling/                           @Yzdyx
