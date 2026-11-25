@@ -116,6 +116,7 @@ the existing indexed documents so root instructions remain short and stable.
 | 2026-11-25 | Use GitHub-native issue forms and documented security routing | Mailbox address invented for the template | No real private contact was supplied; GitHub's reporting routes avoid publishing a fake address | The issue forms direct vulnerability reports to the repository Security route |
 | 2026-11-25 | Keep role labels in engineering guidance but make CODEOWNERS valid now | Keep fictional team handles as examples | Invalid owners do not route reviews and make required-review settings unsafe to enable | The personal owner covers all paths until adopters replace it |
 | 2026-11-25 | Normalize CODEOWNERS and manifest owner comparison by case and use `yzdyx` in manifests | Change the schema to allow uppercase personal handles | GitHub account handles are case-insensitive and the existing manifest pattern remains stable | Manifest ownership resolves against `@Yzdyx` without weakening schema validation |
+| 2026-11-25 | Let `pnpm/action-setup@v4` read the exact version from `package.json` | Repeat `version: 9` in the workflow | The action rejects two version sources in a push run | CI uses the single declared `pnpm@9.12.0`, matching local and lockfile behavior |
 
 If the remote branch changes during implementation, inspect and reconcile before
 pushing. If a check fails, diagnose the actual failure and fix it or report the
